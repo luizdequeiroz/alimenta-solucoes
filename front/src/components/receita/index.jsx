@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReceitaTable from './table';
-import PesquisarReceitaForm from "./pesquisarReceitaForm";
+import PesquisarReceitaForm from './pesquisarReceitaForm';
 import ReceitaForm from "./receitaForm";
 import { bindDefault } from '../../config/binders';
 

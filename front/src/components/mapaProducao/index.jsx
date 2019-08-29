@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import MapaProducaoForm from "./form";
-import GerarMapa from "./relatorio/gerarMapa";
+// import GerarMapa from "./relatorio/gerarMapa";
 import { bindDefault } from '../../config/binders';
  
 class MapaProducao extends Component {

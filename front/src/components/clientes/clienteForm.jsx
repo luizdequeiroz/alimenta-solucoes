@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Accordion, Card, Button, Row, Col } from 'react-bootstrap';
 import { bindReduxForm } from '../../config/binders';
 import { Field, initialize } from 'redux-form';
@@ -35,7 +35,6 @@ function validate(values) {
 }
 
 export default bindReduxForm('cliente', 'clienteRegistro')(register)(validate)(({ dispatch, form, cliente, cancelar, handleSubmit, clienteRegistro, get, setValue }) => {
-    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         dispatch(initialize(form, cliente));

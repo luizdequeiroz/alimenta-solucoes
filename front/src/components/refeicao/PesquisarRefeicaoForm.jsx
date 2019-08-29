@@ -8,7 +8,7 @@ import { treatDefault as treatment } from '../../treatments';
 
 function search(values) {
 
-    return get(`cliente/refeicoes/${values.clienteRefeicao}/${values.dataInicial}/${values.dataFinal}`, 'clienteComRefeicoes', { treatment });
+    return get(`cliente/refeicoes/${values.clienteRefeicao}/${values.dataInicial}/${values.dataFinal}/${values.tipoRefeicao}`, 'clienteComRefeicoes', { treatment });
 }
 
 function validate(values) {
@@ -41,7 +41,7 @@ class PesquisarRefeicaoForm extends Component {
     limpar() {
         const { dispatch, form } = this.props;
 
-        dispatch(initialize(form, { }));
+        dispatch(initialize(form, {}));
     }
 
     render() {
@@ -64,6 +64,13 @@ class PesquisarRefeicaoForm extends Component {
                         <Col style={{ float: 'left', maxWidth: '50%' }}>
                             <Field name="dataFinal" component={Input} type="date" popoverPosition="top" style={{ float: 'left', maxWidth: '50%' }} />
                         </Col>
+                    </Col>
+                    <Col style={{ float: 'left', maxWidth: '30%' }}>
+                        <Field name="tipoRefeicao" component={Input} type="select" placeholder="Tipo de Refeição" popoverPosition="top">
+                            <option>Café da manhã</option>
+                            <option>Almoço</option>
+                            <option>Jantar</option>
+                        </Field>
                     </Col>
                 </Row>
                 <button type="submit" className="btn btn-info" ><i className="fa fa-search" /> Pesquisar</button>
