@@ -52,8 +52,19 @@ router.get('/', (req, res, next) => {
  *       200:
  *         description: objeto com um cliente e seus dados referentes a refeições.
  */
-router.get('/refeicoes/:codigoCliente/:dataInicial/:dataFinal', (req, res, next) => {
-  const { codigoCliente, dataInicial, dataFinal } = req.params;
+router.get('/refeicoes/:codigoCliente/:dataInicial/:dataFinal/:tipoRefeicao?', (req, res, next) => {
+  const { codigoCliente, dataInicial, dataFinal, tipoRefeicao } = req.params;
+
+  const and = [
+    {
+      numsequencial: codigoCliente,
+    },
+    models.Sequelize.literal(`dias.refdatarefeicao between '${dataInicial}' and '${dataFinal}'`)
+  ];
+
+  if (tipoRefeicao && tipoRefeicao != 'undefined') {
+    and.push(models.Sequelize.literal(`dias.reftiporefeicao = '${tipoRefeicao}'`));
+  }
 
   models.cliente.findAll({
     include: [{
@@ -61,12 +72,7 @@ router.get('/refeicoes/:codigoCliente/:dataInicial/:dataFinal', (req, res, next)
       as: 'dias'
     }],
     where: {
-      [models.Sequelize.Op.and]: [
-        {
-          numsequencial: codigoCliente,
-        },
-        models.Sequelize.literal(`dias.refdatarefeicao between '${dataInicial}' and '${dataFinal}'`)
-      ]
+      [models.Sequelize.Op.and]: and
     }
   })
     .then(clientes => {
