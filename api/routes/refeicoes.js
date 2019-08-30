@@ -21,7 +21,7 @@ router.put('/:clienteId/:datarefeicao/:refeicaoId?', (req, res, next) => {
                 ]
             }));
     } else {
-        models.receita.create({ ...req.body, cliente: clienteId, datarefeicao })
+        models.refeicao.create({ ...req.body, cliente: clienteId, datarefeicao })
             .then(() => res.json({
                 sucesso: true
             }))
