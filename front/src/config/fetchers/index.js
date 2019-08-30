@@ -14,7 +14,7 @@ export default function* _fetch(API, endpoint,
         const url = `${API || ApiDefault}/${endpoint}`;
         const data = yield fetch(url, parametros);
         retorno = yield data.json();
-
+        
         if (callback) {
             yield put(callback);
         }

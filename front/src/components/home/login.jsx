@@ -5,7 +5,7 @@ import Input from '../divers/input';
 
 import { Field } from 'redux-form';
 import { post, get } from '../../config/actions';
-import { treatUserName } from '../../treatments';
+import { treatUserName as treatment } from '../../treatments';
 
 const logo = require('../../assets/img/pmenosLogo.JPG');
 
@@ -13,9 +13,7 @@ function login(values) {
     
     return post('usuario/login', 'session', { 
         param: values, 
-        callback: get(`usuario/pornome/${values.usuario}`, 'username', {
-            treatment: treatUserName
-        })
+        callback: get(`usuario/pornome/${values.usuario}`, 'username', { treatment })
     });
 }
 

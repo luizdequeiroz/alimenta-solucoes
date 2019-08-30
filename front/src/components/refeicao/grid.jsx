@@ -9,10 +9,6 @@ let count = 0;
 export default bindDefault('clienteComRefeicoes', 'refeicaoRegistro')(({ clienteComRefeicoes, setValue, refeicaoRegistro }) => {
     const [showModal, setShowModal] = useState(false);
 
-    useEffect(() => () => {
-        setValue('clienteComRefeicoes');
-    }, [setValue]);
-
     useEffect(() => {
         if (refeicaoRegistro) {
             if (refeicaoRegistro.sucesso) {
@@ -22,13 +18,17 @@ export default bindDefault('clienteComRefeicoes', 'refeicaoRegistro')(({ cliente
             }
             setValue('refeicaoRegistro');
         }
+
+        return () => {
+            setValue('clienteComRefeicoes');
+        };
     }, [refeicaoRegistro, setValue]);
 
     function abrirFormRefeicao(refeicao) {
         setShowModal(true);
         setValue('refeicao', refeicao)
     }
-
+    
     const clienteView = (
         <div style={{ marginTop: '40px', marginBottom: '50px' }}>
             {/* Grid para cardapio */}

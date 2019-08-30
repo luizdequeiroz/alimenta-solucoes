@@ -6,7 +6,8 @@ import { Field, initialize } from 'redux-form';
 import Input from '../divers/input';
 
 import { formatDate } from '../../utils';
-import { setValue as actionSetValue } from '../../config/actions';
+import { treatDefault as treatment } from '../../treatments';
+import { get } from '../../config/actions';
 
 function validate(values) {
     const errors = {};
@@ -18,23 +19,23 @@ function validate(values) {
     return errors;
 }
 
-const updateClienteComRefeicao = (clienteComRefeicoes, refeicao, tiporefeicao) => ({
-    ...clienteComRefeicoes,
-    dias: clienteComRefeicoes.dias.map(dia => {
-        if (dia.datarefeicao === refeicao.datarefeicao) {
-            const refeicoes = dia.refeicoes ? dia.refeicoes.filter(r => r.numsequencial !== refeicao.numsequencial) : [];
-            refeicoes.push({
-                ...refeicao,
-                tiporefeicao
-            });
-            return { ...dia, refeicoes };
-        } else {
-            return dia;
-        }
-    })
-});
+// const updateClienteComRefeicao = (clienteComRefeicoes, refeicao, tiporefeicao) => ({
+//     ...clienteComRefeicoes,
+//     dias: clienteComRefeicoes.dias.map(dia => {
+//         if (dia.datarefeicao === refeicao.datarefeicao) {
+//             const refeicoes = dia.refeicoes ? dia.refeicoes.filter(r => r.numsequencial !== refeicao.numsequencial) : [];
+//             refeicoes.push({
+//                 ...refeicao,
+//                 tiporefeicao
+//             });
+//             return { ...dia, refeicoes };
+//         } else {
+//             return dia;
+//         }
+//     })
+// });
 
-export default bindReduxForm('refeicao', 'clienteComRefeicoes')()(validate)(({ show, onHide, dispatch, form, refeicao, clienteComRefeicoes, put, formValues, setValue }) => {
+export default bindReduxForm('refeicao', 'pesquisaRefeicaoFiltros')()(validate)(({ show, onHide, dispatch, form, refeicao, put, formValues, setValue, pesquisaRefeicaoFiltros }) => {
     useEffect(() => {
         if (refeicao) {
             dispatch(initialize(form, refeicao));
@@ -55,7 +56,7 @@ export default bindReduxForm('refeicao', 'clienteComRefeicoes')()(validate)(({ s
 
         put(url, 'refeicaoRegistro', {
             param: { ...refeicao, tiporefeicao },
-            callback: actionSetValue('clienteComRefeicoes', updateClienteComRefeicao(clienteComRefeicoes, refeicao, tiporefeicao))
+            callback: get(`cliente/refeicoes/${pesquisaRefeicaoFiltros.clienteRefeicao}/${pesquisaRefeicaoFiltros.dataInicial}/${pesquisaRefeicaoFiltros.dataFinal}/${pesquisaRefeicaoFiltros.tipoRefeicao}`, 'clienteComRefeicoes', { treatment })
         });
         onHide();
     }

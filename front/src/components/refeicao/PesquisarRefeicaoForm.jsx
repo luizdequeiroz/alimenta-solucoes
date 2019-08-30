@@ -3,12 +3,15 @@ import { bindReduxForm } from '../../config/binders';
 import { Field, initialize } from 'redux-form';
 import { Col, Row } from 'react-bootstrap';
 import Input from '../divers/input';
-import { get } from '../../config/actions';
+import { get, setValue } from '../../config/actions';
 import { treatDefault as treatment } from '../../treatments';
 
 function search(values) {
 
-    return get(`cliente/refeicoes/${values.clienteRefeicao}/${values.dataInicial}/${values.dataFinal}/${values.tipoRefeicao}`, 'clienteComRefeicoes', { treatment });
+    return get(`cliente/refeicoes/${values.clienteRefeicao}/${values.dataInicial}/${values.dataFinal}/${values.tipoRefeicao}`, 'clienteComRefeicoes', {
+        treatment,
+        callback: setValue('pesquisaRefeicaoFiltros', values)
+    });
 }
 
 function validate(values) {
