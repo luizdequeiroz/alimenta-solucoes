@@ -6,7 +6,7 @@ router.put('/:clienteId/:datarefeicao/:refeicaoId?', (req, res, next) => {
     const { clienteId, datarefeicao, refeicaoId } = req.params;
 
     if (refeicaoId) {
-        models.refeicao.update({ ...req.body, cliente: clienteId, datarefeicao }, {
+        models.refeicao.update({ ...req.body, cliente: parseInt(clienteId), datarefeicao }, {
             where: {
                 numsequencial: refeicaoId
             }
