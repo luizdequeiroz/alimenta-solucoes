@@ -76,3 +76,7 @@ typings/
 /build
 
 package-lock.json
+
+.vs/
+bin/
+obj/
