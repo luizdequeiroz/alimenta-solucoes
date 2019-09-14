@@ -54,7 +54,7 @@ class UserForm extends Component {
                     <Field name="senha" component={Input} type="password" placeholder="Senha" popoverPosition="top" />
                     <div className="btn btn-warning" onClick={this.cancelar.bind(this)}>Cancelar</div>
                 </div>
-                <input type="submit" className="btn btn-primary btn-lg btn-block" value="Cadastrar" />
+                <input type="submit" className="btn btn-primary btn-lg btn-block" value="Salvar" />
             </form>
         );
     }
