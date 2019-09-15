@@ -4,12 +4,12 @@ import { Field, initialize } from 'redux-form';
 import { Col, Row } from 'react-bootstrap';
 import Input from '../divers/input';
 import { get, setValue } from '../../config/actions';
-import { treatDefault as treatment } from '../../treatments';
+import { treatRefeicoes, treatDefault as treatment } from '../../treatments';
 
 function search(values) {
 
-    return get(`cliente/refeicoes/${values.clienteRefeicao}/${values.dataInicial}/${values.dataFinal}/${values.tipoRefeicao}`, 'clienteComRefeicoes', {
-        treatment,
+    return get(`refeicao/${values.clienteRefeicao}/${values.dataInicial}/${values.dataFinal}/${values.tipoRefeicao || ''}`, 'dias', {
+        treatment: treatRefeicoes,
         callback: setValue('pesquisaRefeicaoFiltros', values)
     });
 }
@@ -56,7 +56,7 @@ class PesquisarRefeicaoForm extends Component {
                     <Col style={{ float: 'left', maxWidth: '30%' }}>
                         <Field name="clienteRefeicao" component={Input} type="select" placeholder="Cliente" popoverPosition="top">
                             {clientes && clientes.map((cliente, index) => (
-                                <option key={index} value={cliente.numsequencial}>{cliente.nome}</option>
+                                <option key={index} value={cliente.id}>{cliente.nome}</option>
                             ))}
                         </Field>
                     </Col>

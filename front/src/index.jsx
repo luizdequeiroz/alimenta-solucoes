@@ -16,6 +16,9 @@ import DevTools from './config/devtools';
 import './assets/css/material-dashboard.css';
 import './index.css';
 
+import applyPrototypesPlus from 'prototypes-plus';
+applyPrototypesPlus();
+
 ReactDOM.render(
     <Provider store={configureStore()}>
         <Router>

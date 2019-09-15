@@ -6,7 +6,7 @@ import { Field, initialize } from 'redux-form';
 import Input from '../divers/input';
 
 import { formatDate } from '../../utils';
-import { treatDefault as treatment } from '../../treatments';
+import { treatRefeicoes } from '../../treatments';
 import { get } from '../../config/actions';
 
 function validate(values) {
@@ -19,16 +19,16 @@ function validate(values) {
     return errors;
 }
 
-// const updateClienteComRefeicao = (clienteComRefeicoes, refeicao, tiporefeicao) => ({
-//     ...clienteComRefeicoes,
-//     dias: clienteComRefeicoes.dias.map(dia => {
-//         if (dia.datarefeicao === refeicao.datarefeicao) {
-//             const refeicoes = dia.refeicoes ? dia.refeicoes.filter(r => r.numsequencial !== refeicao.numsequencial) : [];
-//             refeicoes.push({
+// const updateClienteComRefeicao = (dias, refeicao, tiporefeicao) => ({
+//     ...dias,
+//     dias: dias.dias.map(dia => {
+//         if (dia.dataRefeicao === refeicao.dataRefeicao) {
+//             const dias = dia.dias ? dia.dias.filter(r => r.numsequencial !== refeicao.numsequencial) : [];
+//             dias.push({
 //                 ...refeicao,
 //                 tiporefeicao
 //             });
-//             return { ...dia, refeicoes };
+//             return { ...dia, dias };
 //         } else {
 //             return dia;
 //         }
@@ -48,15 +48,15 @@ export default bindReduxForm('refeicao', 'pesquisaRefeicaoFiltros')()(validate)(
 
     function salvar(e) {
         e.preventDefault();
-        const { cliente, datarefeicao } = refeicao;
+        const { clienteId, dataRefeicao } = refeicao;
         const tiporefeicao = formValues;
-        const url = refeicao.numsequencial ?
-            `refeicao/${cliente}/${datarefeicao}/${refeicao.numsequencial}`
-            : `refeicao/${cliente}/${datarefeicao}`;
-debugger;
+        const url = refeicao.id ?
+            `refeicao/${clienteId}/${dataRefeicao}/${refeicao.id}`
+            : `refeicao/${clienteId}/${dataRefeicao}`;
+
         put(url, 'refeicaoRegistro', {
             param: { ...refeicao, tiporefeicao },
-            callback: get(`cliente/refeicoes/${pesquisaRefeicaoFiltros.clienteRefeicao}/${pesquisaRefeicaoFiltros.dataInicial}/${pesquisaRefeicaoFiltros.dataFinal}/${pesquisaRefeicaoFiltros.tipoRefeicao}`, 'clienteComRefeicoes', { treatment })
+            callback: get(`refeicao/${pesquisaRefeicaoFiltros.clienteRefeicao}/${pesquisaRefeicaoFiltros.dataInicial}/${pesquisaRefeicaoFiltros.dataFinal}/${pesquisaRefeicaoFiltros.tipoRefeicao || ''}`, 'dias', { treatment: treatRefeicoes }),
         });
         onHide();
     }
@@ -64,11 +64,11 @@ debugger;
     return (
         <Modal show={show} centered>
             <Modal.Header className="alert-primary">
-                <Modal.Title>Adicionar refeição ao dia {formatDate(refeicao.datarefeicao)}</Modal.Title>
+                <Modal.Title>Adicionar refeição ao dia {formatDate(refeicao.dataRefeicao)}</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <form onSubmit={salvar}>
-                    <Field name="tiporefeicao" component={Input} type="select" placeholder="Tipo de Refeição">
+                    <Field name="tipoString" component={Input} type="select" placeholder="Tipo de Refeição">
                         <option>Café da manhã</option>
                         <option>Almoço</option>
                         <option>Jantar</option>
