@@ -1,4 +1,6 @@
-﻿using api.Repositories;
+﻿using api.Authentication;
+using api.Extensions;
+using api.Repositories;
 using api.Repositories.Interfaces;
 using api.Services;
 using api.Services.Interfaces;
@@ -8,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using MySql.Data.MySqlClient;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Diagnostics;
@@ -51,6 +54,17 @@ namespace api
                 });
             });
 
+             var signingConfigurations = new SigningConfigurations();
+            services.AddSingleton(signingConfigurations);
+            var tokenConfigurations = new TokenConfigurations();
+            new ConfigureFromConfigurationOptions<TokenConfigurations>(
+                    Configuration.GetSection("TokenConfigurations"))
+                    .Configure(tokenConfigurations);
+            services.AddSingleton(tokenConfigurations);
+            services.AddAuthJwtConfigurations(signingConfigurations, tokenConfigurations);
+            services.AddTransient<IConnectionFactory, ConnectionFactory>()
+                .AddTransient<IUsuarioRepository, UsuarioRepository>()
+                .AddTransient<IUsuarioService, UsuarioService>();
             services.AddSingleton(factory => new MySqlConnection(Configuration.GetConnectionString("MySqlConnectionString")));
 
             services.AddSingleton<IRefeicaoRepository, RefeicaoRepository>();
