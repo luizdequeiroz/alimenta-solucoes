@@ -54,24 +54,22 @@ namespace api
                 });
             });
 
-             var signingConfigurations = new SigningConfigurations();
+            var signingConfigurations = new SigningConfigurations();
             services.AddSingleton(signingConfigurations);
             var tokenConfigurations = new TokenConfigurations();
+
             new ConfigureFromConfigurationOptions<TokenConfigurations>(
-                    Configuration.GetSection("TokenConfigurations"))
-                    .Configure(tokenConfigurations);
+                Configuration.GetSection("TokenConfigurations")
+            ).Configure(tokenConfigurations);
+
             services.AddSingleton(tokenConfigurations);
             services.AddAuthJwtConfigurations(signingConfigurations, tokenConfigurations);
+
             services.AddTransient<IConnectionFactory, ConnectionFactory>()
                 .AddTransient<IUsuarioRepository, UsuarioRepository>()
                 .AddTransient<IUsuarioService, UsuarioService>();
+
             services.AddSingleton(factory => new MySqlConnection(Configuration.GetConnectionString("MySqlConnectionString")));
-
-            services.AddSingleton<IRefeicaoRepository, RefeicaoRepository>();
-            services.AddSingleton<IClienteRepository, ClienteRepository>();
-
-            services.AddSingleton<IRefeicaoService, RefeicaoService>();
-            services.AddSingleton<IClienteService, ClienteService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -83,16 +81,19 @@ namespace api
             CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
             CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
+            if (Configuration.GetValue<string>("Ambiente") != "P")
             {
-                var version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
-                c.SwaggerEndpoint($"/swagger/{version}/swagger.json", Configuration.GetValue<string>("api_name"));
-                c.RoutePrefix = "swagger";
-            });
+                var routePrefix = string.Empty;
+#if RELEASE
+                routePrefix = $"/{Configuration.GetValue<string>("RoutePrefix")}";
+#endif
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint($"{routePrefix}/swagger/v1/swagger.json", Configuration.GetValue<string>("api_name"));
+                    c.RoutePrefix = "swagger";
+                });
 
-            if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
             }
             else

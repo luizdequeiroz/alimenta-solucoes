@@ -6,7 +6,7 @@ import swal from 'sweetalert2';
 
 let count = 0;
 
-export default bindDefault('dias', 'refeicaoRegistro')(({ dias, setValue, refeicaoRegistro }) => {
+export default bindDefault('clienteComRefeicoes', 'refeicaoRegistro')(({ clienteComRefeicoes, setValue, refeicaoRegistro }) => {
     const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
@@ -20,7 +20,7 @@ export default bindDefault('dias', 'refeicaoRegistro')(({ dias, setValue, refeic
         }
 
         return () => {
-            setValue('dias');
+            setValue('clienteComRefeicoes');
         };
     }, [refeicaoRegistro, setValue]);
 
@@ -28,35 +28,35 @@ export default bindDefault('dias', 'refeicaoRegistro')(({ dias, setValue, refeic
         setShowModal(true);
         setValue('refeicao', refeicao)
     }
-    debugger;
+    
     const clienteView = (
         <div style={{ marginTop: '40px', marginBottom: '50px' }}>
             {/* Grid para cardapio */}
             <div>
                 {/* Clintes */}
                 <div className="gridCliente">
-                    <div>{dias && dias.find(d => d.refeicoes[0].Id > 0).clienteNome}</div>
+                    <div>{clienteComRefeicoes && clienteComRefeicoes.nome}</div>
                 </div>
-                {dias && dias.map((dia, index) => {
+                {clienteComRefeicoes && clienteComRefeicoes.dias && clienteComRefeicoes.dias.map((dia, index) => {
                     count++;
-debugger;
+
                     const diaView = (
                         <>
                             <div key={index} className="gridDia">
                                 <div className="card-header card-header-primary gridDiaSemana">
-                                    {formatDate(dia.dataRefeicao)}
+                                    {formatDate(dia.datarefeicao)}
                                 </div>
-                                {dia.refeicoes && dia.refeicoes.filter(r => r.Id > 0).map((refeicao, jndex) => (
+                                {dia.refeicoes && dia.refeicoes.map((refeicao, jndex) => (
                                     <div key={jndex} className="btn-group pull-right group-buttons">
-                                        <div className="btn btn-link">{refeicao.tipoString}</div>
+                                        <div className="btn btn-link">{refeicao.tiporefeicao}</div>
                                         <div className="btn btn-link" onClick={() => abrirFormRefeicao(refeicao)}><i className="fa fa-edit iconEditar" /></div>
                                         <div className="btn btn-link"><i className="fa fa-close iconFechar" /></div>
                                     </div>
                                 ))}
                                 <div className="card-body">
                                     <div className="btn btn-add btn-add-block btn-success" onClick={() => abrirFormRefeicao({
-                                        dataRefeicao: dia.dataRefeicao,
-                                        cliente: dias.find(r => r.Id > 0).clienteId
+                                        datarefeicao: dia.datarefeicao,
+                                        cliente: clienteComRefeicoes.numsequencial
                                     })}>Adicionar</div>
                                 </div>
                             </div>

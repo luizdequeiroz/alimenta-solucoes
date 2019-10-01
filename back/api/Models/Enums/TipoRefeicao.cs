@@ -4,6 +4,8 @@ namespace api.Models.Enums
 {
     public enum TipoRefeicao
     {
+        [Description("Nenhum")]
+        NENHUM = 0,
         [Description("Café da manhã")]
         CAFE_DA_MANHA = 1,
         [Description("Almoço")]

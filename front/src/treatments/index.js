@@ -5,7 +5,3 @@ export const treatUserName = (response) => {
 }
 
 export const treatDefault = response => response.retorno;
-
-export const treatRefeicoes = response => {
-    return response.retorno.groupBy('dataRefeicao', 'refeicoes')
-}
