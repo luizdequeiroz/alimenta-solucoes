@@ -19,22 +19,6 @@ function validate(values) {
     return errors;
 }
 
-// const updateClienteComRefeicao = (clienteComRefeicoes, refeicao, tiporefeicao) => ({
-//     ...clienteComRefeicoes,
-//     dias: clienteComRefeicoes.dias.map(dia => {
-//         if (dia.datarefeicao === refeicao.datarefeicao) {
-//             const refeicoes = dia.refeicoes ? dia.refeicoes.filter(r => r.numsequencial !== refeicao.numsequencial) : [];
-//             refeicoes.push({
-//                 ...refeicao,
-//                 tiporefeicao
-//             });
-//             return { ...dia, refeicoes };
-//         } else {
-//             return dia;
-//         }
-//     })
-// });
-
 export default bindReduxForm('refeicao', 'pesquisaRefeicaoFiltros')()(validate)(({ show, onHide, dispatch, form, refeicao, put, formValues, setValue, pesquisaRefeicaoFiltros }) => {
     useEffect(() => {
         if (refeicao) {
@@ -50,10 +34,8 @@ export default bindReduxForm('refeicao', 'pesquisaRefeicaoFiltros')()(validate)(
         e.preventDefault();
         const { cliente, datarefeicao } = refeicao;
         const tiporefeicao = formValues;
-        const url = refeicao.numsequencial ?
-            `refeicao/${cliente}/${datarefeicao}/${refeicao.numsequencial}`
-            : `refeicao/${cliente}/${datarefeicao}`;
-debugger;
+        const url = `refeicao/${cliente}/${datarefeicao}`;
+
         put(url, 'refeicaoRegistro', {
             param: { ...refeicao, tiporefeicao },
             callback: get(`cliente/refeicoes/${pesquisaRefeicaoFiltros.clienteRefeicao}/${pesquisaRefeicaoFiltros.dataInicial}/${pesquisaRefeicaoFiltros.dataFinal}/${pesquisaRefeicaoFiltros.tipoRefeicao}`, 'clienteComRefeicoes', { treatment })
