@@ -64,5 +64,38 @@ namespace api.Controllers
                 return BadRequest(e);
             }
         }
+
+        [HttpPut("{usuarioId}")]
+        public async Task<IActionResult> AtualizarUsuarioAsync(int usuarioId, [FromBody] Usuario usuario)
+        {
+            try
+            {
+                var usuarioResult = await usuarioService.BuscarUsuarioAsync(usuarioId);
+                if (usuarioResult == null)
+                    return NotFound();
+
+                usuario.Id = usuarioId;
+                await usuarioService.AtualizarUsuarioAsync(usuario);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
+
+        [HttpDelete("{usuarioId}")]
+        public async Task<IActionResult> ExcluirUsuarioAsync(int usuarioId)
+        {
+            try
+            {
+                await usuarioService.ExcluirUsuarioAsync(new Usuario(){ Id = usuarioId });
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e);
+            }
+        }
     }
 }
