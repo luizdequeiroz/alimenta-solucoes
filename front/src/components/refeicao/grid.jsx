@@ -3,11 +3,21 @@ import { bindDefault } from '../../config/binders';
 import { formatDate } from '../../utils';
 import ModalRefeicaoForm from './modalRefeicaoForm';
 import swal from 'sweetalert2';
+import { treatDefault as treatment } from '../../treatments';
 
 let count = 0;
 
-export default bindDefault('clienteComRefeicoes', 'refeicaoRegistro')(({ clienteComRefeicoes, setValue, refeicaoRegistro }) => {
+export default bindDefault('clienteComRefeicoes', 'refeicaoRegistro', 'refeicaoDel', 'pesquisaRefeicaoFiltros')(({ clienteComRefeicoes, setValue, refeicaoRegistro, refeicaoDel, del, get, pesquisaRefeicaoFiltros }) => {
     const [showModal, setShowModal] = useState(false);
+
+    useEffect(() => {
+        if(refeicaoDel) {
+            if(refeicaoDel.sucesso){
+                swal.fire('Refeição excluida com sucesso!', 'A refeição foi excluida para o dia e para o cliente em exibição!', 'success');
+            }
+            setValue('refeicaoDel');
+        }
+    }, [refeicaoDel, setValue]);
 
     useEffect(() => {
         if (refeicaoRegistro) {
@@ -28,14 +38,31 @@ export default bindDefault('clienteComRefeicoes', 'refeicaoRegistro')(({ cliente
         setShowModal(true);
         setValue('refeicao', refeicao)
     }
-    
+
+    function deletarRefeicao(codigo) {
+
+        swal.fire({
+            type: 'question',
+            title: 'Confirma a exclusão da refeição?',
+            text: 'Tem certeza de que deseja excluir a refeição?',
+            showCancelButton: true,
+            cancelButtonText: 'Não',
+            showConfirmButton: true,
+            confirmButtonText: 'Sim'
+        }).then(({ value }) => {
+            if (value) {
+                del(`refeicao/${codigo}`, 'refeicaoDel', { callback: get(`cliente/refeicoes/${pesquisaRefeicaoFiltros.clienteRefeicao}/${pesquisaRefeicaoFiltros.dataInicial}/${pesquisaRefeicaoFiltros.dataFinal}/${pesquisaRefeicaoFiltros.tipoRefeicao}`, 'clienteComRefeicoes', { treatment }) });
+            }
+        });
+    }
+
     const clienteView = (
         <div style={{ marginTop: '40px', marginBottom: '50px' }}>
             {/* Grid para cardapio */}
             <div>
                 {/* Clintes */}
                 <div className="gridCliente">
-                    <div>{clienteComRefeicoes && clienteComRefeicoes.nome}</div>
+                    {clienteComRefeicoes && <div className="alert alert-warning">{clienteComRefeicoes.nome}</div>}
                 </div>
                 {clienteComRefeicoes && clienteComRefeicoes.dias && clienteComRefeicoes.dias.map((dia, index) => {
                     count++;
@@ -50,7 +77,7 @@ export default bindDefault('clienteComRefeicoes', 'refeicaoRegistro')(({ cliente
                                     <div key={jndex} className="btn-group pull-right group-buttons">
                                         <div className="btn btn-link">{refeicao.tiporefeicao}</div>
                                         <div className="btn btn-link" onClick={() => abrirFormRefeicao(refeicao)}><i className="fa fa-edit iconEditar" /></div>
-                                        <div className="btn btn-link"><i className="fa fa-close iconFechar" /></div>
+                                        <div className="btn btn-link" onClick={() => deletarRefeicao(refeicao.numsequencial)}><i className="fa fa-close iconFechar" /></div>
                                     </div>
                                 ))}
                                 <div className="card-body">

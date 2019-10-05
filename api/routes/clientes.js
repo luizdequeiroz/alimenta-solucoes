@@ -109,6 +109,7 @@ router.get('/refeicoes/:codigoCliente/:dataInicial/:dataFinal/:tipoRefeicao?', (
         });
       });
 
+      cliente.numsequencial = codigoCliente;
       cliente.dias = todosDias;
 
       res.json({

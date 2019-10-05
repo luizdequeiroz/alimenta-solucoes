@@ -57,7 +57,7 @@ export default bindReduxForm('refeicao', 'pesquisaRefeicaoFiltros')()(validate)(
                     </Field>
                     <hr />
                     <div className="btn btn-warning" onClick={onHide}><i className="fa fa-arrow-left" /> Voltar</div>
-                    <button type="submit" className="btn btn-primary"><i className="fa fa-plus" /> Adicionar</button>
+                    <button type="submit" className="btn btn-primary"><i className="fa fa-plus" /> {refeicao.numsequencial ? "Salvar" : "Adicionar"}</button>
                 </form>
             </Modal.Body>
         </Modal>

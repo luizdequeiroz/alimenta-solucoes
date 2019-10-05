@@ -54,7 +54,7 @@ router.put('/:clienteId/:datarefeicao', (req, res, next) => {
             sucesso: true
         });
     } else {
-        models.refeicao.create({...req.body, cliente: clienteId, datarefeicao })
+        models.refeicao.create({ ...req.body, cliente: clienteId, datarefeicao })
             .then(() => res.json({
                 sucesso: true
             }))
@@ -65,6 +65,17 @@ router.put('/:clienteId/:datarefeicao', (req, res, next) => {
                 ]
             }));
     }
+});
+
+router.delete('/:refeicaoId', (req, res, next) => {
+    const { refeicaoId } = req.params;
+
+    models.sequelize.query(
+        `delete from tbrefeicao where refnumsequencial = ${refeicaoId}`, { type: models.sequelize.QueryTypes.SELECT }
+    );
+    res.json({
+        sucesso: true
+    });
 });
 
 module.exports = router;
