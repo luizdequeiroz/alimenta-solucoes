@@ -14,6 +14,6 @@ namespace api.Services.Interfaces
 
          Task AtualizarClienteAsync(Cliente cliente);
 
-         Task ExcluirClienteAsync(Cliente cliente);
+         Task DesativarClienteAsync(Cliente cliente);
     }
 }

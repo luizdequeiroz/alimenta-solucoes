@@ -67,7 +67,10 @@ namespace api
 
             services.AddTransient<IConnectionFactory, ConnectionFactory>()
                 .AddTransient<IUsuarioRepository, UsuarioRepository>()
-                .AddTransient<IUsuarioService, UsuarioService>();
+                .AddTransient<IClienteRepository, ClienteRepository>()
+                .AddTransient<IEnderecoRepository, EnderecoRepository>()
+                .AddTransient<IUsuarioService, UsuarioService>()
+                .AddTransient<IClienteService, ClienteService>();
 
             services.AddSingleton(factory => new MySqlConnection(Configuration.GetConnectionString("MySqlConnectionString")));
         }

@@ -6,7 +6,13 @@ namespace api.Models
     [Table("tbcliente")]
     public class Cliente
     {
+        public Cliente()
+        {
+            Desativado = "N";
+        }
+
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("clinumsequencial")]
         public int Id { get; set; }
 
@@ -30,5 +36,19 @@ namespace api.Models
 
         [Column("clipesrepresentante")]
         public int RepresentanteId { get; set; }
+
+        [Column("clidesativado")]
+        public string Desativado { get; set; }
+
+        [NotMapped]
+        public Endereco Endereco { get; set; }
+
+        [NotMapped]
+        public Endereco EnderecoEntrega { get; set; }
+
+        public void DesativarCliente()
+        {
+            Desativado = "S";
+        }
     }
 }
