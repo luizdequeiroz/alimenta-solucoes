@@ -1,7 +1,3 @@
-let API;
-
-export const defineApi = api => API = api;
-
 export function setValue(key, value) {
     return {
         type: 'set_value',
@@ -28,13 +24,13 @@ const finish = {
 };
 
 
-const request = (method, endpoint, returnReduceKey, param, treatment, callback) => (
+const request = (method, endpoint, returnReduceKey, param, treatment, callback, api) => (
     [
         setValue('loading', proccess),
         {
             type: 'request',
             request: {
-                API,
+                api,
                 method,
                 endpoint,
                 returnReduceKey,
@@ -49,20 +45,20 @@ const request = (method, endpoint, returnReduceKey, param, treatment, callback) 
     ]
 );
 
-export function post(endpoint, returnReduceKey, { param, treatment, callback } = {}) {
-    return request('POST', endpoint, returnReduceKey, param, treatment, callback)
+export function post(endpoint, returnReduceKey, { param, treatment, callback, api } = {}) {
+    return request('POST', endpoint, returnReduceKey, param, treatment, callback, api)
 }
 
-export function put(endpoint, returnReduceKey, { param, treatment, callback } = {}) {
-    return request('PUT', endpoint, returnReduceKey, param, treatment, callback)
+export function put(endpoint, returnReduceKey, { param, treatment, callback, api } = {}) {
+    return request('PUT', endpoint, returnReduceKey, param, treatment, callback, api)
 }
 
-export function get(endpoint, returnReduceKey, { treatment, callback } = {}) {
-    return request('GET', endpoint, returnReduceKey, undefined, treatment, callback)
+export function get(endpoint, returnReduceKey, { treatment, callback, api } = {}) {
+    return request('GET', endpoint, returnReduceKey, undefined, treatment, callback, api)
 }
 
-export function del(endpoint, returnReduceKey, { treatment, callback } = {}) {
-    return request('DELETE', endpoint, returnReduceKey, undefined, treatment, callback)
+export function del(endpoint, returnReduceKey, { treatment, callback, api } = {}) {
+    return request('DELETE', endpoint, returnReduceKey, undefined, treatment, callback, api)
 }
 
 export function dispatch({ type, payload }) {

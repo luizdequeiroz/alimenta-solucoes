@@ -7,12 +7,18 @@ import { Field } from 'redux-form';
 import { post, get } from '../../config/actions';
 import { treatUserName as treatment } from '../../treatments';
 
+import { API_DOTNET } from '../../utils';
+
 const logo = require('../../assets/img/logoV2.png'); //require('../../assets/img/pmenosLogo.JPG');
 
 function login(values) {
     
-    return post('usuario/login', 'session', { 
-        param: values, 
+    return post('Usuarios/signIn', 'session', { 
+        api: API_DOTNET,
+        param: {
+            nome: values.usuario,
+            senha: values.senha
+        }, 
         callback: get(`usuario/pornome/${values.usuario}`, 'username', { treatment })
     });
 }

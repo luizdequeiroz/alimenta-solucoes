@@ -9,3 +9,5 @@ export function formatDate(dateTime) {
     }
     return '-';
 }
+
+export const API_DOTNET = process.env.REACT_APP_API_DEVELOP_NET
