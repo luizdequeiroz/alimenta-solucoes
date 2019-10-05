@@ -14,36 +14,35 @@ namespace api.Controllers
     [ApiController]
     [EnableCors("AllowAll")]
     [Authorize("Bearer")]
-    public class ProdutosController : ControllerBase
+    public class ReceitasController : Controller
     {
-        private readonly IProdutoService produtoService;
+        private readonly IReceitaService receitaService;
 
-        public ProdutosController(IProdutoService produtoService)
+        public ReceitasController(IReceitaService receitaService)
         {
-            this.produtoService = produtoService;
+            this.receitaService = receitaService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> BuscarProdutosAsync()
+        public async Task<IActionResult> BuscarReceitasAsync()
         {
             try
             {
-                var produtos = await produtoService.BuscarProdutosAsync();
-                return Ok(produtos);
+                var receitas = await receitaService.BuscarReceitaAsync();
+                return Ok(receitas);
             }
             catch (Exception e)
             {
                 return BadRequest(e);
             }
         }
-
-        [HttpGet("pesquisarProdutos/{nomeProduto}")]
-        public async Task<IActionResult> pesquisarProdutosAsync(string nomeProduto)
+        [HttpGet("pesquisarReceitas/{nomeReceitas}")]
+        public async Task<IActionResult> pesquisarReceitasAsync(string nomeReceita)
         {
             try
             {
-                var produto = await produtoService.pesquisarProdutosAsync(nomeProduto);
-                return Ok(produto);
+                var receitas = await receitaService.pesquisarReceitaAsync(nomeReceita);
+                return Ok(receitas);
             }
             catch (Exception e)
             {
@@ -54,12 +53,12 @@ namespace api.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> CadastrarProdutoAsync([FromBody] Produto produto)
+        public async Task<IActionResult> CadastrarProdutoAsync([FromBody] Receita receitas)
         {
             try
             {
-                var novoProduto = await produtoService.InserirProdutoAsync(produto);
-                return Created("", novoProduto);
+                var novaReceita = await receitaService.InserirReceitaAsync(receitas);
+                return Created("", novaReceita);
             }
             catch (Exception e)
             {
@@ -67,17 +66,17 @@ namespace api.Controllers
             }
         }
 
-        [HttpPut("{produtoId}")]
-        public async Task<IActionResult> AtualizarProdutoAsync(int produtoId, [FromBody] Produto produto)
+        [HttpPut("{receitaId}")]
+        public async Task<IActionResult> AtualizarProdutoAsync(int receitaId, [FromBody] Receita receita)
         {
             try
             {
-                var produtoResult = await produtoService.BuscarProdutoAsync(produtoId);
+                var produtoResult = await receitaService.BuscarReceitaAsync(receitaId);
                 if (produtoResult == null)
                     return NotFound();
 
-                produto.Id = produtoId;
-                await produtoService.AtualizarProdutoAsync(produto);
+                receita.Id = receitaId;
+                await receitaService.AtualizarReceitaAsync(receita);
                 return NoContent();
             }
             catch (Exception e)
@@ -86,12 +85,12 @@ namespace api.Controllers
             }
         }
 
-        [HttpDelete("{produtoId}")]
-        public async Task<IActionResult> ExcluirProdutoAsync(int produtoId)
+        [HttpDelete("{receitaId}")]
+        public async Task<IActionResult> ExcluirProdutoAsync(int receitaId)
         {
             try
             {
-                await produtoService.ExcluirProdutoAsync(new Produto() { Id = produtoId });
+                await receitaService.ExcluirReceitaAsync(new Receita() { Id = receitaId });
                 return NoContent();
             }
             catch (Exception e)
@@ -99,5 +98,6 @@ namespace api.Controllers
                 return BadRequest(e);
             }
         }
+
     }
 }

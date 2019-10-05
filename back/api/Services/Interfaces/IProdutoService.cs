@@ -8,6 +8,10 @@ namespace api.Services.Interfaces
 {
     public interface IProdutoService
     {
+        Task<IEnumerable<Produto>> BuscarProdutosAsync();
+
+        Task<IEnumerable<Produto>> pesquisarProdutosAsync(string nomeProduto);
+
         Task<Produto> InserirProdutoAsync(Produto produto);
 
         Task<Produto> BuscarProdutoAsync(int id);

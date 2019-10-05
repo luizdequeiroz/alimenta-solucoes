@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace api.Repositories.Scripts
 {
-    internal static class ProdutoScripts
+    internal static class ReceitaScripts
     {
-        internal static string BuscarProdutoScript =>
+        internal static string BuscarReceitaScript =>
             @"SELECT 
                 *
-            FROM tbproduto 
-            WHERE pronome like %@nomeProduto%";
+            FROM tbreceita 
+            WHERE recnome like %@nomeReceita%";
     }
 }

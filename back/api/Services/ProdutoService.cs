@@ -19,6 +19,18 @@ namespace api.Services
             return cliente;
         }
 
+        public async Task<IEnumerable<Produto>> BuscarProdutosAsync()
+        {
+            var produtos = await produtoRepository.FindAllAsync();
+            return produtos;
+        }
+
+        public async Task<IEnumerable<Produto>> pesquisarProdutosAsync(string nomeProduto)
+        {
+            var produtos = await produtoRepository.pesquisarProdutosAsync(nomeProduto);
+            return produtos;
+        }
+
         public async Task<Produto> BuscarProdutoAsync(int id)
         {
             var produto = await produtoRepository.FindOneAsync(new Produto() { Id = id });

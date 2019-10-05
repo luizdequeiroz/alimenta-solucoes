@@ -14,6 +14,14 @@ namespace api.Repositories
         public ProdutoRepository(IConnectionFactory connectionFactory) : base(connectionFactory)
         {
         }
-       
+        public async Task<IEnumerable<Produto>> pesquisarProdutosAsync(string nomeProduto)
+        {
+            using (var conexao = factory.CreateConnectionOpened())
+            {
+                var sql = ProdutoScripts.BuscarProdutoScript;
+                var retorno = await conexao.QueryAsync<Produto>(sql, nomeProduto);
+                return retorno;
+            }
+        }
     }
 }

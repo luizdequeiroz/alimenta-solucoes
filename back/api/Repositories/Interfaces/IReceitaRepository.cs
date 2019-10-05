@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace api.Repositories.Interfaces
 {
-    interface IProdutoRepository : IBaseRepository<Produto>
+    interface IReceitaRepository : IBaseRepository<Receita>
     {
-        Task<IEnumerable<Produto>> pesquisarProdutosAsync(string nomeProduto);
+        Task<IEnumerable<Receita>> pesquisarReceitaAsync(string nomeReceita);
     }
 }

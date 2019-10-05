@@ -64,7 +64,7 @@ namespace api.Controllers
                 return BadRequest(e);
             }
         }
-
+        
         [HttpPut("{usuarioId}")]
         public async Task<IActionResult> AtualizarUsuarioAsync(int usuarioId, [FromBody] Usuario usuario)
         {
