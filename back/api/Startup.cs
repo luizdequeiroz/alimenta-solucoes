@@ -90,7 +90,8 @@ namespace api
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint($"{routePrefix}/swagger/v1/swagger.json", Configuration.GetValue<string>("api_name"));
+                    var version = FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
+                    c.SwaggerEndpoint($"{routePrefix}/swagger/{version}/swagger.json", Configuration.GetValue<string>("api_name"));
                     c.RoutePrefix = "swagger";
                 });
 
