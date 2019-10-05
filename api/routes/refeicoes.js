@@ -4,8 +4,8 @@ var models = require('../models/index');
 
 /**
  * @swagger
- * /refeicao/{clienteId}/{datarefeicao}/{refeicaoId?}:
- *   post:
+ * /refeicao/{clienteId}/{datarefeicao}:
+ *   put:
  *     description: Realiza login de usuário, gerando token
  *     parameters:
  *       - name: clienteId
@@ -16,53 +16,45 @@ var models = require('../models/index');
  *         in: path
  *         required: true
  *         type: string
- *       - name: refeicaoId
- *         in: path
- *         required: false
- *         type: string
  *       - name: dados
  *         in: body
  *         required: true
  *         schema:
  *           type: object
- *           required:
- *             - usuario
- *             - senha
  *           properties:
- *             usuario:
+ *             numsequencial:
  *               type: string
- *             senha:
+ *             diarefeicao:
+ *               type: string
+ *             tiporefeicao:
+ *               type: string
+ *             valorrefeicao:
+ *               type: string
+ *             horarioentrega:
+ *               type: string
+ *             cliente:
+ *               type: string
+ *             datarefeicao:
  *               type: string
  *     produces:
  *       - application/json
  *     responses:
  *       200:
- *         description: objeto com um token de sessão
+ *         description: objeto de retorno de salvamento de refeição
  */
-router.put('/:clienteId/:datarefeicao/:refeicaoId?', (req, res, next) => {
-    const { clienteId, datarefeicao, refeicaoId } = req.params;
+router.put('/:clienteId/:datarefeicao', (req, res, next) => {
+    const { clienteId, datarefeicao } = req.params;
+    const { numsequencial, tiporefeicao } = req.body;
 
-    if (refeicaoId) {
-        models.refeicao.update({ ...req.body, cliente: parseInt(clienteId), datarefeicao }, {
-            where: {
-                numsequencial: refeicaoId
-            }
-        })
-            .then(() => {
-                res.json({
-                    sucesso: true
-                });
-            })
-            .then(error => {
-                res.json({
-                    stack: error,
-                    erros: [
-                        "Erro ao tentar salvar refeição"
-                    ]
-                });
-            });
+    if (numsequencial) {
+        models.sequelize.query(
+            `update tbrefeicao set reftiporefeicao = '${tiporefeicao}' where refnumsequencial = ${numsequencial}`, { type: models.sequelize.QueryTypes.SELECT }
+        );
+        res.json({
+            sucesso: true
+        });
     } else {
-        models.refeicao.create({ ...req.body, cliente: clienteId, datarefeicao })
+        models.refeicao.create({...req.body, cliente: clienteId, datarefeicao })
             .then(() => res.json({
                 sucesso: true
             }))
