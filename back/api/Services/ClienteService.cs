@@ -9,10 +9,13 @@ namespace api.Services
     public class ClienteService : IClienteService
     {
         private readonly IClienteRepository clienteRepository;
+        
+        private readonly IEnderecoRepository enderecoRepository;
 
-        public ClienteService(IClienteRepository clienteRepository)
+        public ClienteService(IClienteRepository clienteRepository, IEnderecoRepository enderecoRepository)
         {
             this.clienteRepository = clienteRepository;
+            this.enderecoRepository = enderecoRepository;
         }
 
         public async Task AtualizarClienteAsync(Cliente cliente)
@@ -23,18 +26,39 @@ namespace api.Services
         public async Task<Cliente> BuscarClientePorIdAsync(int clienteId)
         {
             var cliente = await clienteRepository.FindOneAsync(new Cliente() { Id = clienteId });
+            await PreencherEnderecosClienteAsync(cliente);
+
             return cliente;
         }
 
         public async Task<IEnumerable<Cliente>> BuscarClientesAsync()
         {
             var clientes = await clienteRepository.FindAllAsync();
+
+            foreach (var cliente in clientes)
+            {
+                await PreencherEnderecosClienteAsync(cliente);
+            }
+
             return clientes;
         }
 
-        public async Task ExcluirClienteAsync(Cliente cliente)
+        private async Task PreencherEnderecosClienteAsync(Cliente cliente)
         {
-            await clienteRepository.DeleteAsync(cliente);
+            if (cliente != null)
+            {
+                if (cliente.EnderecoId > 0)
+                    cliente.Endereco = await enderecoRepository.FindOneAsync(new Endereco() { Id = cliente.EnderecoId });
+
+                if (cliente.EnderecoEntregaId > 0)
+                    cliente.EnderecoEntrega = await enderecoRepository.FindOneAsync(new Endereco() { Id = cliente.EnderecoEntregaId });
+            }
+        }
+
+        public async Task DesativarClienteAsync(Cliente cliente)
+        {
+            cliente.DesativarCliente();
+            await clienteRepository.UpdateAsync(cliente);
         }
 
         public async Task<Cliente> InserirClienteAsync(Cliente cliente)
