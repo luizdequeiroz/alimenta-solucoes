@@ -8,7 +8,7 @@ export default bindDefault('usuarios')(({ usuarios }) => {
 
     const columns = [
         {
-            dataField: 'codigo',
+            dataField: 'id',
             text: 'Código',
             sort: true
         },

@@ -5,7 +5,7 @@ function* genericFetch({ request: { api, method, endpoint = '', returnReduceKey,
 
     const session = sessionStorage.getItem('session');
     const retorno = session && JSON.parse(session).retorno;
-    const bearer = retorno && `Bearer ${retorno}`;
+    const bearer = retorno && `Bearer ${retorno.token}`;
     
     const body = JSON.stringify(param);
     var params = {

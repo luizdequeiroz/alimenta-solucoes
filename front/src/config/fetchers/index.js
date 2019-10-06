@@ -13,27 +13,40 @@ export default function* _fetch(API, endpoint,
     try {
         const url = `${API || ApiDefault}/${endpoint}`;
         const data = yield fetch(url, parametros);
-        retorno = yield data.json();
-
-        if (callback) {
-            yield put(callback);
-        }
-    } catch (error) {
-
-        if (retorno.sucesso === undefined) { // TODO
-            retorno = {
-                stack: "Erro.",
+        if (data.ok) {
+            if (data.status === 200) {
+                retorno = yield data.json();
+            } else {
+                retorno = {
+                    sucesso: true
+                };
+            }
+        } else {
+            retorno = { // TODO
+                stack: 'Error',
                 erros: [
                     "Erro de comunicação com o servidor."
                 ]
             };
         }
 
-        retorno = error;
+        if (callback) {
+            yield put(callback);
+        }
+    } catch (error) {
+
+        retorno = { // TODO
+            stack: error,
+            erros: [
+                "Erro de comunicação com o servidor."
+            ]
+        };
+
+        // retorno = error; // TODO
         yield put(callback[0]);
     }
 
-    if (retorno.sucesso === undefined) { // TODO
+    if (!retorno.sucesso && !retorno.stack) { // TODO
         retorno = {
             sucesso: true,
             retorno: retorno

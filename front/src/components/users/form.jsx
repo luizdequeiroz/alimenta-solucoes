@@ -2,12 +2,27 @@ import React, { Component } from 'react';
 import { bindReduxForm } from '../../config/binders';
 import { Field, initialize } from 'redux-form';
 import Input from '../divers/input';
-import { post } from '../../config/actions';
+import { post, put, get, setValue } from '../../config/actions';
 import swal from 'sweetalert2';
+import { API_DOTNET } from '../../utils';
+import { treatDefault as treatment } from '../../treatments'
 
-function register(values) {
+function register(values, route, props) {
 
-    return post('usuario/salvar', 'usuarioRegistro', { param: values });
+    const config = {
+        api: API_DOTNET,
+        param: values,
+        callback: [
+            get('Usuarios', 'usuarios', { api: API_DOTNET, treatment }),
+            setValue('usuario')
+        ]
+    };
+
+    if (props.usuario) {
+        return put(`Usuarios/${props.usuario.id}`, 'usuarioAtualizacao', config);
+    } else {
+        return post('Usuarios', 'usuarioRegistro', config);
+    }
 }
 
 function validate(values) {
@@ -34,14 +49,19 @@ class UserForm extends Component {
     }
 
     cancelar() {
-        const { dispatch, form, usuario, cancelar } = this.props;
-        
-        dispatch(initialize(form, usuario));
-        cancelar();
+        const { setValue } = this.props;
+
+        setValue('usuario');
+        setValue('usuarioRegistro');
+        setValue('usuarioAtualizacao');
     }
 
     render() {
-        const { handleSubmit, usuarioRegistro } = this.props;
+        const { handleSubmit, usuarioRegistro, usuarioAtualizacao } = this.props;
+
+        if (usuarioAtualizacao && usuarioAtualizacao.stack) {
+            swal.fire('Erro ao tentar atualizar!', 'O sistema acionou uma exceção ao tentar atualizar o usuário.', 'error');
+        }
 
         if (usuarioRegistro && usuarioRegistro.stack) {
             swal.fire('Erro ao tentar registrar!', 'O sistema acionou uma exceção ao tentar registrar um usuário.', 'error');
@@ -60,4 +80,4 @@ class UserForm extends Component {
     }
 }
 
-export default bindReduxForm('usuario', 'usuarioRegistro')(register)(validate)(UserForm);
+export default bindReduxForm('usuario', 'usuarioRegistro', 'usuarioAtualizacao')(register)(validate)(UserForm);

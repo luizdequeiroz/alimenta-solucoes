@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { bindDefault } from '../../config/binders';
 
 import swal from 'sweetalert2';
+import { API_DOTNET } from '../../utils';
+import { get } from '../../config/actions';
+import { treatDefault as treatment } from '../../treatments';
 
 export default bindDefault('usuarioDel')(({ usuario, setValue, del, usuarioDel }) => {
+
+    useEffect(() => {
+        
+        if (usuarioDel && usuarioDel.stack) {
+            swal.fire('Erro ao tentar excluir!', 'O sistema acionou uma exceção na tentativa de excluir o usuário!', 'error');
+        }
+    }, [usuarioDel])
 
     function editarUsuario() {
 
@@ -23,19 +33,15 @@ export default bindDefault('usuarioDel')(({ usuario, setValue, del, usuarioDel }
             confirmButtonText: 'Sim'
         }).then(({ value }) => {
             if (value) {
-                del(`usuario/excluir/${codigo}`, 'usuarioDel');
+                del(`Usuarios/${codigo}`, 'usuarioDel', { api: API_DOTNET, callback: get('Usuarios', 'usuarios', { api: API_DOTNET, treatment }) });
             }
         });
-    }
-
-    if (usuarioDel && usuarioDel.stack) {
-        swal.fire('Erro ao tentar excluir!', 'O sistema acionou uma exceção na tentativa de excluir o usuário!', 'error');
     }
 
     return (
         <div className="btn-group btn-actions">
             <div className="btn btn-primary btn-sm" onClick={editarUsuario}>Editar</div>
-            <div className="btn btn-danger btn-sm" onClick={() => deleteUsuario(usuario.codigo)}>Excluir</div>
+            <div className="btn btn-danger btn-sm" onClick={() => deleteUsuario(usuario.id)}>Excluir</div>
         </div>
     );
 });

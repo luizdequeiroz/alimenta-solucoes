@@ -2,22 +2,15 @@ import React, { Component } from 'react';
 import UsersTable from './table';
 import UserForm from "./form";
 import { bindDefault } from '../../config/binders';
+import { API_DOTNET } from '../../utils';
+import { treatDefault as treatment } from '../../treatments';
 
 class Users extends Component {
 
     componentDidMount() {
         const { get } = this.props;
 
-        get('usuario', 'usuarios', {
-            treatment: response => response.retorno
-        });
-    }
-
-    cancelar() {
-        const { setValue } = this.props;
-
-        setValue('usuario');
-        setValue('usuarioRegistro');
+        get('Usuarios', 'usuarios', { api: API_DOTNET, treatment });
     }
 
     render() {
@@ -42,7 +35,7 @@ class Users extends Component {
                                 <h4 className="card-title">{usuario ? 'Salvar' : 'Novo'} usuário</h4>
                             </div>
                             <div className="card-body">
-                                <UserForm key={usuario && usuario.codigo} cancelar={this.cancelar.bind(this)} />
+                                <UserForm key={usuario && usuario.id} />
                             </div>
                         </div>
                     </div>
