@@ -1,4 +1,5 @@
 import { put } from 'redux-saga/effects';
+import swal from 'sweetalert2';
 
 const ApiDefault = process.env.NODE_ENV !== 'production' ? process.env.REACT_APP_API_DEVELOP : process.env.REACT_APP_API_PRODUCT;
 
@@ -22,12 +23,22 @@ export default function* _fetch(API, endpoint,
                 };
             }
         } else {
-            retorno = { // TODO
-                stack: 'Error',
-                erros: [
-                    "Erro de comunicação com o servidor."
-                ]
-            };
+            if (data.status === 401) {
+                yield swal.fire({
+                    title: 'Sessão encerrada!',
+                    text: 'Faça login novamente para iniciar uma nova sessão.',
+                    type: 'warning'
+                });
+                sessionStorage.clear();
+                yield put({ type: 'clear_values' });
+            } else {
+                retorno = { // TODO
+                    stack: 'Error',
+                    erros: [
+                        "Erro de comunicação com o servidor."
+                    ]
+                };
+            }
         }
 
         if (callback) {
