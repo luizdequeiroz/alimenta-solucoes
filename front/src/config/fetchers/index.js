@@ -24,7 +24,7 @@ export default function* _fetch(API, endpoint,
             }
         } else {
             if (data.status === 401) {
-                yield swal.fire({
+                swal.fire({
                     title: 'Sessão encerrada!',
                     text: 'Faça login novamente para iniciar uma nova sessão.',
                     type: 'warning'
