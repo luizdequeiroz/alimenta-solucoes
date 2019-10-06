@@ -23,19 +23,19 @@ export default [
     },
     {
         path: '/clientes',
-        icon: 'users',
+        icon: 'user-circle-o',
         name: 'Clientes',
         component: Clientes
     },
     {
         path: '/produtos',
-        icon: 'users',
+        icon: 'lemon-o',
         name: 'Produtos',
         component: Produtos
     },
     {
         path: '/fornecedores',
-        icon: 'users',
+        icon: 'truck',
         name: 'Fornecedores',
         component: Fornecedores
     },
