@@ -10,7 +10,7 @@ export default bindDefault()(({ onNovoCliente, searchProps }) => {
     return (
         <div>
             <div>
-                <SearchBar ref={input => searchClientes = input} placeholder="Digite o nome do Cliente" {...searchProps} />
+                <SearchBar ref={input => searchClientes = input} placeholder="Digite para filtrar clientes..." {...searchProps} />
             </div>
             <div className="btn btn-light" onClick={() => searchClientes.props.onClear()}><i className="fa fa-eraser" /> Limpar</div>
             <div className="btn btn-success" onClick={() => onNovoCliente(true)}><i className="fa fa-plus" /> Novo Cliente</div>

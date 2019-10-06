@@ -10,14 +10,33 @@ export default bindDefault('clientes')(({ clientes, baseProps }) => {
 
     const columns = [
         {
-            dataField: 'codigo',
+            dataField: 'id',
             text: 'Código',
             sort: true
         },
         {
             dataField: 'nome',
-            text: 'cliente',
+            text: 'Cliente',
             sort: true
+        },
+        {
+            dataField: 'telefone',
+            text: 'Contato'
+        },
+        {
+            dataField: 'endereco',
+            text: 'Endereço',
+            formatter: endereco => {
+                const endArray = [];
+
+                if (endereco.logradouro) endArray.push(endereco.logradouro);
+                if (endereco.numero) endArray.push(endereco.numero);
+                if (endereco.cidade) endArray.push(endereco.cidade);
+
+                const concatenation = endArray.join(', ');
+
+                return `${concatenation} - ${endereco.estado}`
+            }
         },
         {
             dataField: 'actions',
@@ -33,7 +52,7 @@ export default bindDefault('clientes')(({ clientes, baseProps }) => {
 
     const tableProps = {
         ...baseProps,
-        keyField: "codigo",
+        keyField: "id",
         data: _clientes,
         columns: columns
     };
