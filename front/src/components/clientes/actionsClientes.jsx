@@ -3,13 +3,14 @@ import { bindDefault } from '../../config/binders';
 
 import swal from 'sweetalert2';
 import { treatDefault as treatment } from '../../treatments';
+import { API_DOTNET } from '../../utils';
 
 export default bindDefault('clienteDel')(({ cliente, setValue, del, clienteDel, get }) => {
     
     useEffect(() => {
         if (clienteDel) {
             if (clienteDel.sucesso) {
-                get('cliente', 'clientes', { treatment });
+                get('Clientes', 'clientes', { api: API_DOTNET, treatment });
                 swal.fire('cliente excluida com sucesso!', undefined, 'success');
             } else if (clienteDel.stack) {
                 swal.fire('Erro ao tentar excluir!', 'O sistema acionou uma exceção na tentativa de excluir a cliente!', 'error');
@@ -18,10 +19,10 @@ export default bindDefault('clienteDel')(({ cliente, setValue, del, clienteDel, 
         }
     }, [clienteDel, get, setValue]);
 
-    function editarcliente() {
+    function editarCliente() {
+
         setValue('clienteRegistro');
         setValue('cliente', cliente);
-        get(`itensclientes/${cliente.codigo}`, 'itensclientes', { treatment });
     }
 
     function deletecliente(codigo) {
@@ -35,15 +36,15 @@ export default bindDefault('clienteDel')(({ cliente, setValue, del, clienteDel, 
             confirmButtonText: 'Sim'
         }).then(({ value }) => {
             if (value) {
-                del(`cliente/excluir/${codigo}`, 'clienteDel');
+                del(`Clientes/${codigo}`, 'clienteDel');
             }
         });
     }
 
     return (
         <div className="btn-group btn-actions">
-            <div className="btn btn-primary btn-sm" onClick={editarcliente}>Editar</div>
-            <div className="btn btn-danger btn-sm" onClick={() => deletecliente(cliente.codigo)}>Excluir</div>
+            <div className="btn btn-primary btn-sm" onClick={editarCliente}>Editar</div>
+            <div className="btn btn-danger btn-sm" onClick={() => deletecliente(cliente.id)}>Excluir</div>
         </div>
     );
 });
