@@ -53,7 +53,7 @@ namespace api.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<IActionResult> CadastrarProdutoAsync([FromBody] Receita receitas)
+        public async Task<IActionResult> CadastrarReceitaAsync([FromBody] Receita receitas)
         {
             try
             {
@@ -67,12 +67,12 @@ namespace api.Controllers
         }
 
         [HttpPut("{receitaId}")]
-        public async Task<IActionResult> AtualizarProdutoAsync(int receitaId, [FromBody] Receita receita)
+        public async Task<IActionResult> AtualizarReceitaAsync(int receitaId, [FromBody] Receita receita)
         {
             try
             {
-                var produtoResult = await receitaService.BuscarReceitaAsync(receitaId);
-                if (produtoResult == null)
+                var receitaResult = await receitaService.BuscarReceitaAsync(receitaId);
+                if (receitaResult == null)
                     return NotFound();
 
                 receita.Id = receitaId;
@@ -86,7 +86,7 @@ namespace api.Controllers
         }
 
         [HttpDelete("{receitaId}")]
-        public async Task<IActionResult> ExcluirProdutoAsync(int receitaId)
+        public async Task<IActionResult> ExcluirReceitaAsync(int receitaId)
         {
             try
             {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace api.Models
 {
-    [Table("tbproduto")]
+    [Table("tbreceita")]
     public class Receita
     {
         [Key]
@@ -26,5 +26,6 @@ namespace api.Models
         [Column("recquantidaderendimento")]
         public decimal quantidadeRendimento { get; set; }
 
+        
     }
 }
