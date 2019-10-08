@@ -26,6 +26,7 @@ namespace api.Models
         [Column("recquantidaderendimento")]
         public decimal quantidadeRendimento { get; set; }
 
-        
+        public IEnumerable<Produto> produtos { get; set; }
+
     }
 }
